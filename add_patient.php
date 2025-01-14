@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hospital Management System</title>
+    <title>Add Patient</title>
     <style>
         table {
             width: 100%;
@@ -24,12 +24,10 @@
     </style>
 </head>
 <body>
-    <h2>Hospital Management System</h2>
+    <h2>Add Patient</h2>
 
-    <!-- Form for Adding/Editing Patient -->
-    <h3>Add/Update Patient</h3>
-    <form id="patientForm">
-        <input type="hidden" id="patientId">
+    <!-- Form for Adding Patient -->
+    <form id="addPatientForm">
         <label for="name">Patient Name:</label>
         <input type="text" id="name" required>
         <br>
@@ -45,7 +43,7 @@
         <label for="disease">Disease:</label>
         <input type="text" id="disease" required>
         <br>
-        <button type="submit">Save</button>
+        <button type="submit">Add Patient</button>
     </form>
 
     <!-- Patient List Table -->
@@ -58,7 +56,6 @@
                 <th>Age</th>
                 <th>Gender</th>
                 <th>Disease</th>
-                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -67,42 +64,34 @@
     </table>
 
     <script>
-        // Store patient data in an array (replace this with a database in a real app)
+        // Array to store patient data (replace this with a database for production)
         let patients = [];
 
-        // Add or Update patient
-        document.getElementById('patientForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const id = document.getElementById('patientId').value;
+        // Add patient function
+        document.getElementById('addPatientForm').addEventListener('submit', function (e) {
+            e.preventDefault();  // Prevent form submission and page reload
+            
             const name = document.getElementById('name').value;
             const age = document.getElementById('age').value;
             const gender = document.getElementById('gender').value;
             const disease = document.getElementById('disease').value;
 
-            if (id) {
-                // Update patient
-                const patient = patients.find(p => p.id == id);
-                patient.name = name;
-                patient.age = age;
-                patient.gender = gender;
-                patient.disease = disease;
-            } else {
-                // Add new patient
-                const newPatient = {
-                    id: patients.length + 1,
-                    name: name,
-                    age: age,
-                    gender: gender,
-                    disease: disease
-                };
-                patients.push(newPatient);
-            }
+            // Create new patient object
+            const newPatient = {
+                id: patients.length + 1,  // Auto-increment ID
+                name: name,
+                age: age,
+                gender: gender,
+                disease: disease
+            };
 
-            // Reset form
-            document.getElementById('patientForm').reset();
-            document.getElementById('patientId').value = '';
+            // Add the new patient to the array
+            patients.push(newPatient);
 
-            // Refresh table
+            // Clear the form fields
+            document.getElementById('addPatientForm').reset();
+
+            // Refresh the patient table to include the new patient
             displayPatients();
         });
 
@@ -119,32 +108,13 @@
                     <td>${patient.age}</td>
                     <td>${patient.gender}</td>
                     <td>${patient.disease}</td>
-                    <td>
-                        <button onclick="editPatient(${patient.id})">Edit</button>
-                        <button onclick="deletePatient(${patient.id})">Delete</button>
-                    </td>
                 `;
             });
         }
 
-        // Edit patient
-        function editPatient(id) {
-            const patient = patients.find(p => p.id == id);
-            document.getElementById('patientId').value = patient.id;
-            document.getElementById('name').value = patient.name;
-            document.getElementById('age').value = patient.age;
-            document.getElementById('gender').value = patient.gender;
-            document.getElementById('disease').value = patient.disease;
-        }
-
-        // Delete patient
-        function deletePatient(id) {
-            patients = patients.filter(p => p.id !== id);
-            displayPatients();
-        }
-
-        // Initial display
+        // Initial display (in case there are any pre-existing patients)
         displayPatients();
     </script>
 </body>
 </html>
+
